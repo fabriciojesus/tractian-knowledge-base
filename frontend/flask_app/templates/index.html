@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tractian KB | RAG System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-logo">🔧</span>
+                <span class="brand-name">TRACTIAN <strong>KB</strong></span>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="section">
+                    <h3 class="section-title">Upload de Documentos</h3>
+                    <div class="upload-zone" id="dropZone">
+                        <input type="file" id="fileInput" multiple accept=".pdf" hidden>
+                        <div class="upload-icon">📄</div>
+                        <p>Arraste PDFs ou clique para selecionar</p>
+                        <span class="upload-hint">Suporta múltiplos arquivos</span>
+                    </div>
+                    <div id="fileList" class="file-list"></div>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Documentos Indexados</h3>
+                    <div id="indexedFileList" class="indexed-file-list">
+                        <!-- Will be populated by JS -->
+                        <p class="empty-hint">Nenhum documento indexado.</p>
+                    </div>
+                </div>
+
+                <div class="section stats">
+                    <div class="stat-card">
+                        <span class="stat-label">Documentos</span>
+                        <span id="statDocs" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Chunks</span>
+                        <span id="statChunks" class="stat-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <div id="apiStatus" class="status-dot offline"></div>
+                    <span id="apiStatusText">API Offline</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <header class="chat-header">
+                <div class="header-info">
+                    <h1>Assistente de Manutenção Industrial</h1>
+                    <p>Baseado em Inteligência Artificial e seus documentos</p>
+                </div>
+                <button id="clearChat" class="btn btn-outline btn-sm">Limpar Chat</button>
+            </header>
+
+            <div id="chatMessages" class="chat-messages">
+                <!-- Welcome Message -->
+                <div class="message assistant welcome">
+                    <div class="message-content">
+                        Olá! Eu sou o assistente inteligente da Tractian. 🚀<br><br>
+                        Faça o upload dos documentos técnicos (PDFs) na barra lateral para que eu possa ajudá-lo com
+                        informações específicas sobre seus ativos.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <select id="modelSelect" class="chat-model-select">
+                        <option value="gemini">Gemini</option>
+                        <option value="openai">GPT-4o</option>
+                    </select>
+                    <textarea id="userInput" placeholder="Faça uma pergunta sobre seus documentos..."
+                        rows="1"></textarea>
+                    <button id="sendBtn" class="btn btn-primary btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="input-footer">O assistente pode cometer erros. Verifique informações importantes.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications"></div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal-overlay" hidden>
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Processar Documentos</h2>
+                <button id="closeModal" class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalInitial" class="modal-state">
+                    <div class="file-summary">
+                        <div class="summary-icon">📂</div>
+                        <div class="summary-info">
+                            <h3 id="modalFileCount">0 arquivos selecionados</h3>
+                            <p id="modalFileListText"></p>
+                        </div>
+                    </div>
+                    <p class="modal-instruction">Clique abaixo para iniciar o processamento e indexação desses
+                        documentos na base de conhecimento.</p>
+                    <button id="modalProcessBtn" class="btn btn-primary btn-lg btn-block">
+                        <span class="btn-text">Começar Processamento</span>
+                        <div class="loader-inner" hidden></div>
+                    </button>
+                </div>
+
+                <div id="modalProcessing" class="modal-state" hidden>
+                    <div class="processing-visual">
+                        <div class="gear-container">
+                            <span class="gear">⚙️</span>
+                        </div>
+                        <h3>Processando...</h3>
+                        <p>Extraindo texto e gerando vetores. Isso pode levar alguns segundos.</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div id="modalSuccess" class="modal-state" hidden>
+                    <div class="success-visual">
+                        <div class="success-icon">✅</div>
+                        <h3>Sucesso!</h3>
+                        <p>Documentos indexados e prontos para consulta.</p>
+                    </div>
+                    <button id="modalDoneBtn" class="btn btn-outline btn-block">Concluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+
+</html>
