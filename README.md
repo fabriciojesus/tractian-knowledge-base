@@ -27,7 +27,7 @@ A **Retrieval-Augmented Generation (RAG)** system that allows users to upload PD
 ### Prerequisites
 
 - Python 3.11+
-- OpenAI API key
+- OpenAI API key **and/or** Gemini API key
 - Gemini Key
 
 ### 1. Clone & Install
@@ -44,7 +44,7 @@ make install
 
 ```bash
 cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
+# Edit .env and add your OPENAI_API_KEY or GEMINI_API_KEY
 ```
 
 ### 3. Run
@@ -169,8 +169,10 @@ All configuration is managed via environment variables (`.env` file):
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | - | OpenAI API key (required) |
-| `OPENAI_MODEL` | `gpt-4` | LLM model to use |
+| `OPENAI_API_KEY` | - | OpenAI API key |
+| `OPENAI_MODEL` | `gpt-4o-mini` | OpenAI model to use |
+| `GEMINI_API_KEY` | - | Gemini API key |
+| `GEMINI_MODEL` | `gemini-1.5-flash` | Gemini model to use |
 | `EMBEDDING_MODEL` | `all-MiniLM-L6-v2` | Sentence transformer model |
 | `CHUNK_SIZE` | `1000` | Text chunk size in characters |
 | `CHUNK_OVERLAP` | `200` | Overlap between chunks |
