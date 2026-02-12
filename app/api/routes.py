@@ -4,7 +4,7 @@ API route definitions for document upload and question answering.
 
 import time
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, UploadFile, Form
 from loguru import logger
 
 from app.api.models import (
@@ -37,6 +37,8 @@ async def upload_documents(
     files: list[UploadFile] = File(
         ..., description="One or more PDF files to upload"
     ),
+    chunk_size: int | None = Form(None),
+    chunk_overlap: int | None = Form(None),
 ) -> DocumentUploadResponse:
     """Upload and index PDF documents."""
     start_time = time.time()
@@ -67,7 +69,12 @@ async def upload_documents(
                 continue
 
             # Process PDF: extract text and chunk
-            chunks = pdf_processor.process_pdf(content, file.filename)
+            chunks = pdf_processor.process_pdf(
+                content,
+                file.filename,
+                chunk_size=chunk_size,
+                chunk_overlap=chunk_overlap,
+            )
 
             if not chunks:
                 errors.append(

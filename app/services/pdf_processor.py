@@ -111,7 +111,11 @@ class PDFProcessor:
         return chunks
 
     def process_pdf(
-        self, file_content: bytes, filename: str
+        self,
+        file_content: bytes,
+        filename: str,
+        chunk_size: int | None = None,
+        chunk_overlap: int | None = None,
     ) -> list[DocumentChunk]:
         """
         Full pipeline: extract text from PDF and chunk it.
@@ -119,9 +123,45 @@ class PDFProcessor:
         Args:
             file_content: Raw bytes of the PDF file.
             filename: Original filename.
+            chunk_size: Optional override for chunk size.
+            chunk_overlap: Optional override for chunk overlap.
 
         Returns:
             List of DocumentChunk objects ready for embedding.
         """
         pages = self.extract_text_from_pdf(file_content, filename)
+
+        # If custom chunking parameters are provided, use a temporary splitter
+        if chunk_size is not None or chunk_overlap is not None:
+            size = chunk_size if chunk_size is not None else self.chunk_size
+            overlap = (
+                chunk_overlap
+                if chunk_overlap is not None
+                else self.chunk_overlap
+            )
+            logger.info(
+                f"Using custom chunking: size={size}, overlap={overlap}"
+            )
+            temp_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=size,
+                chunk_overlap=overlap,
+                length_function=len,
+                separators=["\n\n", "\n", ". ", " ", ""],
+            )
+            chunks = []
+            for page_data in pages:
+                text = page_data["text"]
+                page_chunks = temp_splitter.split_text(text)
+                for i, chunk_text in enumerate(page_chunks):
+                    chunk = DocumentChunk(
+                        text=chunk_text,
+                        metadata={
+                            "source": page_data["source"],
+                            "page": page_data["page"],
+                            "chunk_index": i,
+                        },
+                    )
+                    chunks.append(chunk)
+            return chunks
+
         return self.chunk_text(pages)

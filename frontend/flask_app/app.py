@@ -55,11 +55,19 @@ def upload():
         print(f"DEBUG: Lendo arquivo: {f.filename}")
         upload_files.append(("files", (f.filename, f.read(), f.content_type)))
     
+    chunk_size = request.form.get("chunk_size")
+    chunk_overlap = request.form.get("chunk_overlap")
+    
     try:
         print(f"DEBUG: Enviando para o backend: {API_BASE_URL}/documents")
+        data = {}
+        if chunk_size: data["chunk_size"] = chunk_size
+        if chunk_overlap: data["chunk_overlap"] = chunk_overlap
+        
         response = requests.post(
             f"{API_BASE_URL}/documents",
             files=upload_files,
+            data=data,
             timeout=120
         )
         print(f"DEBUG: Resposta do backend: {response.status_code}")

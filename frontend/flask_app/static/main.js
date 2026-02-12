@@ -182,6 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData();
         selectedFiles.forEach(f => formData.append('files', f));
 
+        const chunkSize = document.getElementById('chunkSize').value;
+        const chunkOverlap = document.getElementById('chunkOverlap').value;
+        formData.append('chunk_size', chunkSize);
+        formData.append('chunk_overlap', chunkOverlap);
+
         showModalState('processing');
 
         try {
