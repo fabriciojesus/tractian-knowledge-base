@@ -126,12 +126,18 @@
 
                     <div class="chunk-settings">
                         <div class="input-group">
-                            <label for="chunkSize">Chunk Size</label>
-                            <input type="number" id="chunkSize" value="1000" min="100" max="5000" step="100">
+                            <div class="label-row">
+                                <label for="chunkSize">Chunk Size</label>
+                                <span id="chunkSizeValue" class="slider-value">1000</span>
+                            </div>
+                            <input type="range" id="chunkSize" min="100" max="4000" step="100" value="1000">
                         </div>
                         <div class="input-group">
-                            <label for="chunkOverlap">Overlap</label>
-                            <input type="number" id="chunkOverlap" value="200" min="0" max="1000" step="50">
+                            <div class="label-row">
+                                <label for="chunkOverlap">Overlap</label>
+                                <span id="chunkOverlapValue" class="slider-value">200</span>
+                            </div>
+                            <input type="range" id="chunkOverlap" min="0" max="1000" step="50" value="200">
                         </div>
                     </div>
 

@@ -175,6 +175,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Slider Value Synchronization ---
+    const chunkSizeSlider = document.getElementById('chunkSize');
+    const chunkSizeDisplay = document.getElementById('chunkSizeValue');
+    const chunkOverlapSlider = document.getElementById('chunkOverlap');
+    const chunkOverlapDisplay = document.getElementById('chunkOverlapValue');
+
+    chunkSizeSlider.addEventListener('input', () => {
+        chunkSizeDisplay.innerText = chunkSizeSlider.value;
+    });
+
+    chunkOverlapSlider.addEventListener('input', () => {
+        chunkOverlapDisplay.innerText = chunkOverlapSlider.value;
+    });
+
     // --- Upload Action from Modal ---
     modalProcessBtn.addEventListener('click', async () => {
         if (selectedFiles.length === 0) return;
