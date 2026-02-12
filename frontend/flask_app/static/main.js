@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const refHtml = references.map((r, i) => `
                 <div class="ref-item">
                     <div class="ref-header" onclick="this.nextElementSibling.hidden = !this.nextElementSibling.hidden">
-                        📖 Referência ${i + 1}
+                        📖 Referência ${i + 1} <span class="ref-hint">(clique aqui para ver mais)</span>
                     </div>
                     <div class="ref-content" hidden>${r}</div>
                 </div>
