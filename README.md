@@ -33,8 +33,10 @@ A **Retrieval-Augmented Generation (RAG)** system that allows users to upload PD
 ### 1. Clone & Install
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/fabriciojesus/tractian-knowledge-base.git
 cd Tractian_KB
+
+# This will create a virtual environment and install dependencies
 make install
 ```
 
