@@ -10,7 +10,7 @@ A **Retrieval-Augmented Generation (RAG)** system that allows users to upload PD
 │  Frontend    │◀────│                                          │
 └─────────────┘     │  ┌─────────────┐   ┌──────────────────┐  │
                     │  │ PDF Process  │   │  LLM Service     │  │
-                    │  │ - Extract    │   │  - OpenAI GPT-4  │  │
+                    │  │ - Extract    │   │  - OpenAI GPT-5  │  │
                     │  │ - Chunk      │   │  - Prompt Eng.   │  │
                     │  └──────┬───────┘   └────────▲─────────┘  │
                     │         │                    │             │
