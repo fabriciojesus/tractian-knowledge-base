@@ -820,3 +820,17 @@ body {
     border: none;
     transition: all 0.2s ease;
 }
+
+/* Reference Hint */
+.ref-hint {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 500;
+    margin-left: 8px;
+    opacity: 0.8;
+}
+
+.ref-header:hover .ref-hint {
+    opacity: 1;
+    text-decoration: underline;
+}
