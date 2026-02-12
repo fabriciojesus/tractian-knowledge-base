@@ -179,6 +179,18 @@ All configuration is managed via environment variables (`.env` file):
 | `TOP_K_RESULTS` | `3` | Number of chunks for context |
 | `LLM_TEMPERATURE` | `0.1` | LLM temperature (lower = more deterministic) |
 
+### 🤖 LLM Multi-Provider Support
+
+This project supports two main providers. You can switch between them in the UI:
+
+| Provider | Model | Cost | Recommendation |
+| :--- | :--- | :--- | :--- |
+| **Google Gemini** | `gemini-1.5-flash` | **Free Tier** available | Recommended for testing and free usage. |
+| **OpenAI** | `gpt-4o-mini` | **Paid Only** (Credits required) | Use if you have an active billing account. |
+
+> [!NOTE]
+> If you see a `billing_not_active` error with OpenAI, it means your account has no credits or the API key is restricted. Switch to Gemini to continue for free.
+
 ## 🧠 Technical Decisions
 
 ### Why FAISS?
