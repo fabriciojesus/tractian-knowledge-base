@@ -28,6 +28,7 @@ A **Retrieval-Augmented Generation (RAG)** system that allows users to upload PD
 
 - Python 3.11+
 - OpenAI API key
+- Gemini Key
 
 ### 1. Clone & Install
 
