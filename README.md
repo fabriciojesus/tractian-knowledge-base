@@ -6,7 +6,7 @@ A **Retrieval-Augmented Generation (RAG)** system that allows users to upload PD
 
 ```
 ┌─────────────┐     ┌──────────────────────────────────────────┐
-│  Streamlit   │────▶│              FastAPI Backend              │
+│  Flask       │────▶│              FastAPI Backend              │
 │  Frontend    │◀────│                                          │
 └─────────────┘     │  ┌─────────────┐   ┌──────────────────┐  │
                     │  │ PDF Process  │   │  LLM Service     │  │
